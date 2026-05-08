@@ -1,0 +1,151 @@
+/* =====================================================
+   Estilos del formulario de captura
+   ===================================================== */
+
+.form-seccion {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 1.75rem;
+  box-shadow: var(--sombra);
+  margin-bottom: 1.5rem;
+}
+
+.form-seccion h2 {
+  font-size: 1.1rem;
+  color: var(--color-primario);
+  margin-bottom: 1.25rem;
+  padding-bottom: .6rem;
+  border-bottom: 2px solid var(--color-borde);
+}
+
+/* --- Campos --------------------------------------------- */
+.campos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+}
+
+.campo label {
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  padding: .5rem .75rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  font-size: .9rem;
+  font-family: var(--fuente);
+  color: var(--color-texto);
+  background: var(--color-fondo);
+  transition: border-color .2s;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--color-secundario);
+  background: #fff;
+}
+
+.campo textarea { resize: vertical; min-height: 80px; }
+
+.campo--ancho-completo {
+  grid-column: 1 / -1;
+}
+
+/* --- Grilla de asistencia ------------------------------- */
+.tabla-asistencia {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .85rem;
+  overflow-x: auto;
+  display: block;
+}
+
+.tabla-asistencia th,
+.tabla-asistencia td {
+  border: 1px solid var(--color-borde);
+  padding: .4rem .5rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.tabla-asistencia th {
+  background: var(--color-primario);
+  color: #fff;
+  font-weight: 600;
+}
+
+.tabla-asistencia th.grupo-sin {
+  background: var(--color-secundario);
+}
+
+.tabla-asistencia th.grupo-con {
+  background: #6c5ce7;
+}
+
+.tabla-asistencia td:first-child {
+  text-align: left;
+  font-weight: 600;
+  background: var(--color-fondo);
+  min-width: 90px;
+}
+
+.tabla-asistencia input[type="number"] {
+  width: 64px;
+  padding: .3rem .4rem;
+  border: 1px solid var(--color-borde);
+  border-radius: 4px;
+  text-align: center;
+  font-size: .85rem;
+}
+
+.tabla-asistencia input[type="number"]:focus {
+  outline: none;
+  border-color: var(--color-secundario);
+}
+
+/* --- Acciones del formulario ---------------------------- */
+.form-acciones {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.estado-envio {
+  text-align: center;
+  padding: 1rem;
+  border-radius: var(--radio);
+  font-weight: 600;
+  display: none;
+}
+
+.estado-envio.exito {
+  background: #e6f9f0;
+  color: #1a7a4a;
+  border: 1px solid #a3e4c1;
+}
+
+.estado-envio.error {
+  background: #fdf0ee;
+  color: #c0392b;
+  border: 1px solid #e8b4b0;
+}
+
+@media (max-width: 600px) {
+  .campos-grid { grid-template-columns: 1fr; }
+  .form-acciones { flex-direction: column; }
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Evento – SECTEI</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/form.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar__marca" href="../index.html">Eventos SECTEI</a>
+    <ul class="navbar__nav">
+      <li><a href="../geovisor.html">Geovisor</a></li>
+      <li><a href="../dashboard.html">Dashboard</a></li>
+      <li><a href="index.html" class="activo">Registrar evento</a></li>
+    </ul>
+  </nav>
+
+  <main class="contenedor">
+    <div class="encabezado-pagina">
+      <h1>Registrar evento</h1>
+      <p>Completa los datos del evento y la grilla de asistencia.</p>
+    </div>
+
+    <form id="form-evento" novalidate>
+
+      <!-- Sección 1: Datos del evento -->
+      <div class="form-seccion">
+        <h2>1. Datos del evento</h2>
+        <div class="campos-grid">
+
+          <div class="campo">
+            <label for="nombre">Nombre del evento *</label>
+            <input type="text" id="nombre" required placeholder="Ej. Feria de Ciencia 2025">
+          </div>
+
+          <div class="campo">
+            <label for="serie_id">Serie / programa</label>
+            <select id="serie_id">
+              <option value="">— Evento único —</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="fecha">Fecha *</label>
+            <input type="date" id="fecha" required>
+          </div>
+
+          <div class="campo">
+            <label for="municipio">Municipio</label>
+            <input type="text" id="municipio" placeholder="Ej. Monterrey">
+          </div>
+
+          <div class="campo">
+            <label for="nombre_lugar">Nombre del lugar</label>
+            <input type="text" id="nombre_lugar" placeholder="Ej. Centro Cultural">
+          </div>
+
+          <div class="campo">
+            <label for="latitud">Latitud</label>
+            <input type="number" id="latitud" step="any" placeholder="25.6866">
+          </div>
+
+          <div class="campo">
+            <label for="longitud">Longitud</label>
+            <input type="number" id="longitud" step="any" placeholder="-100.3161">
+          </div>
+
+          <div class="campo">
+            <label for="tematica">Temática</label>
+            <input type="text" id="tematica" placeholder="Ej. Robótica educativa">
+          </div>
+
+          <div class="campo campo--ancho-completo">
+            <label for="ponentes">Ponentes / invitados <small>(separar por comas)</small></label>
+            <input type="text" id="ponentes" placeholder="Ej. Dr. García, Mtra. López">
+          </div>
+
+          <div class="campo campo--ancho-completo">
+            <label for="notas">Notas adicionales</label>
+            <textarea id="notas" placeholder="Observaciones, contexto, etc."></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Sección 2: Asistencia -->
+      <div class="form-seccion">
+        <h2>2. Registro de asistencia</h2>
+        <p style="font-size:.85rem; color:var(--color-texto-suave); margin-bottom:1rem;">
+          Captura el número de asistentes por rango de edad, género y condición de discapacidad.
+          Deja en 0 los grupos sin asistentes.
+        </p>
+        <div style="overflow-x:auto;">
+          <table class="tabla-asistencia" id="tabla-asistencia"></table>
+        </div>
+      </div>
+
+      <!-- Estado de envío -->
+      <div class="estado-envio" id="estado-envio"></div>
+
+      <!-- Acciones -->
+      <div class="form-acciones">
+        <button type="reset" class="btn btn-secundario">Limpiar</button>
+        <button type="submit" class="btn btn-primario" id="btn-guardar">Guardar evento</button>
+      </div>
+
+    </form>
+  </main>
+
+  <footer>
+    Secretaría de Ciencia, Tecnología e Innovación
+  </footer>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/form.js"></script>
+</body>
+</html>

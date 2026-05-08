@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventos SECTEI</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar__marca" href="index.html">Eventos SECTEI</a>
+    <ul class="navbar__nav">
+      <li><a href="geovisor.html">Geovisor</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="form/index.html">Registrar evento</a></li>
+    </ul>
+  </nav>
+
+  <main class="contenedor">
+    <div class="encabezado-pagina">
+      <h1>Visualizador de Eventos SECTEI</h1>
+      <p>Registro, análisis y visualización de eventos desarrollados por la Secretaría.</p>
+    </div>
+
+    <!-- KPIs rápidos -->
+    <div class="grid-kpis" id="kpis">
+      <div class="kpi">
+        <div class="kpi__valor" id="kpi-eventos">—</div>
+        <div class="kpi__etiqueta">Total de eventos</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__valor" id="kpi-asistentes">—</div>
+        <div class="kpi__etiqueta">Total de asistentes</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__valor" id="kpi-municipios">—</div>
+        <div class="kpi__etiqueta">Municipios atendidos</div>
+      </div>
+    </div>
+
+    <!-- Navegación principal -->
+    <div class="grid-nav">
+      <a class="tarjeta-nav" href="geovisor.html">
+        <span class="tarjeta-nav__icono">🗺️</span>
+        <span class="tarjeta-nav__titulo">Geovisor</span>
+        <span class="tarjeta-nav__desc">Explora los eventos en el mapa por municipio y fecha.</span>
+      </a>
+      <a class="tarjeta-nav" href="dashboard.html">
+        <span class="tarjeta-nav__icono">📊</span>
+        <span class="tarjeta-nav__titulo">Dashboard</span>
+        <span class="tarjeta-nav__desc">Indicadores de asistencia por género, edad y discapacidad.</span>
+      </a>
+      <a class="tarjeta-nav" href="form/index.html">
+        <span class="tarjeta-nav__icono">📝</span>
+        <span class="tarjeta-nav__titulo">Registrar evento</span>
+        <span class="tarjeta-nav__desc">Captura un nuevo evento y sus datos de asistencia.</span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    Secretaría de Ciencia, Tecnología e Innovación &mdash; Datos abiertos
+  </footer>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/config.js"></script>
+  <script>
+    async function cargarKPIs() {
+      try {
+        const [{ count: totalEventos }, { data: asistencia }, { data: municipiosData }] =
+          await Promise.all([
+            supabase.from('eventos').select('*', { count: 'exact', head: true }),
+            supabase.from('asistencia').select('conteo'),
+            supabase.from('eventos').select('municipio'),
+          ]);
+
+        const totalAsistentes = (asistencia || []).reduce((s, r) => s + (r.conteo || 0), 0);
+        const municipios = new Set((municipiosData || []).map(r => r.municipio).filter(Boolean)).size;
+
+        document.getElementById('kpi-eventos').textContent    = (totalEventos ?? 0).toLocaleString('es-MX');
+        document.getElementById('kpi-asistentes').textContent = totalAsistentes.toLocaleString('es-MX');
+        document.getElementById('kpi-municipios').textContent = municipios.toLocaleString('es-MX');
+      } catch (e) {
+        console.error('Error cargando KPIs:', e);
+      }
+    }
+
+    cargarKPIs();
+  </script>
+</body>
+</html>

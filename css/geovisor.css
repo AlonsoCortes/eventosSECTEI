@@ -1,0 +1,126 @@
+/* =====================================================
+   Estilos del geovisor
+   ===================================================== */
+
+.layout-geovisor {
+  display: flex;
+  height: calc(100vh - 56px);  /* restar navbar */
+  overflow: hidden;
+}
+
+/* --- Panel lateral ---------------------------------- */
+.panel-lateral {
+  width: 300px;
+  min-width: 240px;
+  background: var(--color-superficie);
+  border-right: 1px solid var(--color-borde);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-lateral__encabezado {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.panel-lateral__encabezado h2 {
+  font-size: 1rem;
+  color: var(--color-primario);
+  margin-bottom: .75rem;
+}
+
+.panel-lateral__contenido {
+  overflow-y: auto;
+  flex: 1;
+  padding: .75rem;
+}
+
+/* Filtros */
+.filtro-grupo {
+  margin-bottom: 1rem;
+}
+
+.filtro-grupo label {
+  display: block;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--color-texto-suave);
+  margin-bottom: .35rem;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.filtro-grupo select,
+.filtro-grupo input {
+  width: 100%;
+  padding: .4rem .6rem;
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  font-size: .85rem;
+  background: var(--color-fondo);
+}
+
+.filtro-grupo select:focus,
+.filtro-grupo input:focus {
+  outline: none;
+  border-color: var(--color-secundario);
+}
+
+/* Lista de eventos en panel */
+.lista-eventos { list-style: none; }
+
+.lista-eventos li {
+  padding: .6rem .5rem;
+  border-bottom: 1px solid var(--color-borde);
+  cursor: pointer;
+  font-size: .85rem;
+  transition: background .15s;
+}
+
+.lista-eventos li:hover { background: var(--color-fondo); }
+
+.lista-eventos li .ev-nombre {
+  font-weight: 600;
+  color: var(--color-primario);
+}
+
+.lista-eventos li .ev-meta {
+  color: var(--color-texto-suave);
+  font-size: .78rem;
+}
+
+/* --- Mapa ------------------------------------------- */
+#mapa {
+  flex: 1;
+  height: 100%;
+}
+
+/* --- Popup MapLibre --------------------------------- */
+.popup-evento {
+  font-family: var(--fuente);
+  min-width: 200px;
+}
+
+.popup-evento h3 {
+  font-size: .95rem;
+  color: var(--color-primario);
+  margin-bottom: .4rem;
+}
+
+.popup-evento p {
+  font-size: .82rem;
+  color: var(--color-texto);
+  margin: .2rem 0;
+}
+
+.popup-evento .etiqueta {
+  font-weight: 600;
+  color: var(--color-texto-suave);
+}
+
+@media (max-width: 700px) {
+  .layout-geovisor { flex-direction: column; }
+  .panel-lateral { width: 100%; height: 220px; border-right: none; border-bottom: 1px solid var(--color-borde); }
+  #mapa { height: calc(100vh - 56px - 220px); }
+}

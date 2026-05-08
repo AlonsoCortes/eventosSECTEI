@@ -1,0 +1,248 @@
+/* =====================================================
+   Estilos globales – eventosSECTEI
+   ===================================================== */
+
+:root {
+  --color-primario:    #1a4a7a;
+  --color-secundario:  #2d7dd2;
+  --color-acento:      #f4a620;
+  --color-fondo:       #f5f7fa;
+  --color-superficie:  #ffffff;
+  --color-texto:       #1e2432;
+  --color-texto-suave: #6b7280;
+  --color-borde:       #e2e8f0;
+  --radio:             8px;
+  --sombra:            0 2px 8px rgba(0,0,0,.08);
+  --fuente:            'Segoe UI', system-ui, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--fuente);
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Navbar ----------------------------------------- */
+.navbar {
+  background: var(--color-primario);
+  color: #fff;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar__marca {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar__nav {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.navbar__nav a {
+  color: rgba(255,255,255,.85);
+  text-decoration: none;
+  font-size: .9rem;
+  transition: color .2s;
+}
+
+.navbar__nav a:hover,
+.navbar__nav a.activo {
+  color: #fff;
+  border-bottom: 2px solid var(--color-acento);
+  padding-bottom: 2px;
+}
+
+/* --- Contenedor principal --------------------------- */
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  flex: 1;
+}
+
+/* --- Encabezado de página --------------------------- */
+.encabezado-pagina {
+  margin-bottom: 2rem;
+}
+
+.encabezado-pagina h1 {
+  font-size: 1.75rem;
+  color: var(--color-primario);
+}
+
+.encabezado-pagina p {
+  color: var(--color-texto-suave);
+  margin-top: .4rem;
+}
+
+/* --- Tarjetas --------------------------------------- */
+.tarjeta {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 1.5rem;
+  box-shadow: var(--sombra);
+}
+
+/* --- Grid de tarjetas de navegación ----------------- */
+.grid-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.tarjeta-nav {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-texto);
+  box-shadow: var(--sombra);
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+}
+
+.tarjeta-nav:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  border-color: var(--color-secundario);
+}
+
+.tarjeta-nav__icono {
+  font-size: 2.5rem;
+}
+
+.tarjeta-nav__titulo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primario);
+}
+
+.tarjeta-nav__desc {
+  font-size: .85rem;
+  color: var(--color-texto-suave);
+}
+
+/* --- KPIs / indicadores ----------------------------- */
+.grid-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.kpi {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--sombra);
+}
+
+.kpi__valor {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primario);
+  line-height: 1;
+}
+
+.kpi__etiqueta {
+  font-size: .8rem;
+  color: var(--color-texto-suave);
+  margin-top: .4rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* --- Botones ---------------------------------------- */
+.btn {
+  display: inline-block;
+  padding: .55rem 1.25rem;
+  border-radius: var(--radio);
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background .2s, opacity .2s;
+  text-decoration: none;
+}
+
+.btn-primario {
+  background: var(--color-secundario);
+  color: #fff;
+}
+
+.btn-primario:hover { background: var(--color-primario); }
+
+.btn-secundario {
+  background: transparent;
+  color: var(--color-secundario);
+  border: 1px solid var(--color-secundario);
+}
+
+.btn-secundario:hover {
+  background: var(--color-secundario);
+  color: #fff;
+}
+
+/* --- Footer ----------------------------------------- */
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: .8rem;
+  color: var(--color-texto-suave);
+  border-top: 1px solid var(--color-borde);
+  margin-top: auto;
+}
+
+/* --- Utilidades ------------------------------------- */
+.cargando {
+  text-align: center;
+  color: var(--color-texto-suave);
+  padding: 2rem;
+}
+
+.error-msg {
+  color: #c0392b;
+  background: #fdf0ee;
+  border: 1px solid #e8b4b0;
+  border-radius: var(--radio);
+  padding: .75rem 1rem;
+  font-size: .9rem;
+}
+
+@media (max-width: 600px) {
+  .navbar { padding: 0 1rem; }
+  .navbar__nav { gap: 1rem; }
+  .contenedor { padding: 1.25rem 1rem; }
+}

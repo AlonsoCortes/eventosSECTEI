@@ -1,0 +1,18 @@
+# Credenciales locales (nunca subir al repositorio)
+js/config.local.js
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Logs
+*.log

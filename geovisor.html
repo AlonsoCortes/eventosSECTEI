@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geovisor – Eventos SECTEI</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/geovisor.css">
+  <!-- MapLibre GL CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar__marca" href="index.html">Eventos SECTEI</a>
+    <ul class="navbar__nav">
+      <li><a href="geovisor.html" class="activo">Geovisor</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="form/index.html">Registrar evento</a></li>
+    </ul>
+  </nav>
+
+  <div class="layout-geovisor">
+
+    <!-- Panel lateral de filtros y lista -->
+    <aside class="panel-lateral">
+      <div class="panel-lateral__encabezado">
+        <h2>Filtros</h2>
+        <div class="filtro-grupo">
+          <label for="filtro-municipio">Municipio</label>
+          <select id="filtro-municipio">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-grupo">
+          <label for="filtro-fecha-desde">Desde</label>
+          <input type="date" id="filtro-fecha-desde">
+        </div>
+        <div class="filtro-grupo">
+          <label for="filtro-fecha-hasta">Hasta</label>
+          <input type="date" id="filtro-fecha-hasta">
+        </div>
+        <button class="btn btn-secundario" id="btn-limpiar-filtros" style="width:100%;margin-top:.5rem">
+          Limpiar filtros
+        </button>
+      </div>
+
+      <div class="panel-lateral__contenido">
+        <ul class="lista-eventos" id="lista-eventos">
+          <li style="padding:.75rem;color:var(--color-texto-suave)">Cargando eventos…</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Mapa -->
+    <div id="mapa"></div>
+  </div>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- MapLibre GL JS -->
+  <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/geovisor.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – Eventos SECTEI</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar__marca" href="index.html">Eventos SECTEI</a>
+    <ul class="navbar__nav">
+      <li><a href="geovisor.html">Geovisor</a></li>
+      <li><a href="dashboard.html" class="activo">Dashboard</a></li>
+      <li><a href="form/index.html">Registrar evento</a></li>
+    </ul>
+  </nav>
+
+  <main class="contenedor">
+    <div class="encabezado-pagina">
+      <h1>Dashboard de asistencia</h1>
+      <p>Indicadores generales de participación en eventos SECTEI.</p>
+    </div>
+
+    <!-- KPIs -->
+    <div class="grid-kpis">
+      <div class="kpi">
+        <div class="kpi__valor" id="kpi-eventos">—</div>
+        <div class="kpi__etiqueta">Total eventos</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__valor" id="kpi-asistentes">—</div>
+        <div class="kpi__etiqueta">Total asistentes</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__valor" id="kpi-pct-mujeres">—</div>
+        <div class="kpi__etiqueta">% Mujeres</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__valor" id="kpi-pct-disc">—</div>
+        <div class="kpi__etiqueta">% Con discapacidad</div>
+      </div>
+    </div>
+
+    <!-- Gráficas -->
+    <div class="grid-graficas">
+
+      <div class="tarjeta-grafica">
+        <h3>Asistentes por rango de edad</h3>
+        <div id="grafica-edad"></div>
+      </div>
+
+      <div class="tarjeta-grafica">
+        <h3>Asistentes por género</h3>
+        <div id="grafica-genero"></div>
+      </div>
+
+      <div class="tarjeta-grafica">
+        <h3>Asistentes por condición de discapacidad</h3>
+        <div id="grafica-discapacidad"></div>
+      </div>
+
+    </div>
+
+    <!-- Tabla de eventos recientes -->
+    <div class="tarjeta" style="margin-top:1.5rem">
+      <h3 style="color:var(--color-primario);margin-bottom:1rem">Últimos 10 eventos</h3>
+      <div style="overflow-x:auto">
+        <table class="tabla-recientes" id="tabla-recientes">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Nombre</th>
+              <th>Municipio</th>
+              <th>Asistentes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" style="text-align:center;color:var(--color-texto-suave);padding:1rem">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    Secretaría de Ciencia, Tecnología e Innovación &mdash; Datos abiertos
+  </footer>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- Observable Plot -->
+  <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/dist/plot.umd.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+/* =====================================================
+   Estilos del dashboard
+   ===================================================== */
+
+.grid-graficas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.tarjeta-grafica {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 1.5rem;
+  box-shadow: var(--sombra);
+}
+
+.tarjeta-grafica h3 {
+  font-size: .95rem;
+  color: var(--color-primario);
+  margin-bottom: 1rem;
+}
+
+/* Observable Plot genera un SVG, ajustamos el tamaño */
+.tarjeta-grafica figure {
+  margin: 0;
+}
+
+.tarjeta-grafica svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* --- Tabla de eventos recientes --------------------- */
+.tabla-recientes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .85rem;
+}
+
+.tabla-recientes th {
+  background: var(--color-primario);
+  color: #fff;
+  padding: .5rem .75rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.tabla-recientes td {
+  padding: .5rem .75rem;
+  border-bottom: 1px solid var(--color-borde);
+  color: var(--color-texto);
+}
+
+.tabla-recientes tr:hover td {
+  background: var(--color-fondo);
+}
+
+/* Filtro rápido en dashboard */
+.barra-filtros {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.barra-filtros label {
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--color-texto-suave);
+}
+
+.barra-filtros select,
+.barra-filtros input {
+  padding: .4rem .65rem;
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  font-size: .85rem;
+  background: var(--color-superficie);
+}
+
+@media (max-width: 600px) {
+  .grid-graficas { grid-template-columns: 1fr; }
+  .barra-filtros { flex-direction: column; align-items: flex-start; }
+}
