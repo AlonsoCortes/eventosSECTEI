@@ -87,7 +87,18 @@ CREATE POLICY "Lectura pública asistencia"
     ON asistencia FOR SELECT
     USING (true);
 
--- Escritura solo desde service_role (formulario interno usa service_role key)
--- Las políticas INSERT/UPDATE/DELETE no se crean aquí; se bloquean por defecto para anon.
--- Si el formulario usa service_role key en el cliente, RLS no le aplica.
--- Si en el futuro se requiere auth de usuarios, agregar políticas aquí.
+-- Escritura para usuarios autenticados con Supabase Auth
+-- Los correos/contraseñas se gestionan desde Supabase Dashboard → Authentication → Users
+
+CREATE POLICY "Inserción autenticada eventos"
+    ON eventos FOR INSERT
+    TO authenticated
+    WITH CHECK (true);
+
+CREATE POLICY "Inserción autenticada asistencia"
+    ON asistencia FOR INSERT
+    TO authenticated
+    WITH CHECK (true);
+
+-- Las series las gestionan los administradores desde el Dashboard de Supabase;
+-- los capturistas solo pueden leerlas para seleccionarlas en el formulario.

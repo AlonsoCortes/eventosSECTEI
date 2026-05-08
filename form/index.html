@@ -6,116 +6,213 @@
   <title>Registrar Evento – SECTEI</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/form.css">
+  <!-- MapLibre GL CSS (para el picker de coordenadas) -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css">
 </head>
 <body>
 
-  <nav class="navbar">
-    <a class="navbar__marca" href="../index.html">Eventos SECTEI</a>
-    <ul class="navbar__nav">
-      <li><a href="../geovisor.html">Geovisor</a></li>
-      <li><a href="../dashboard.html">Dashboard</a></li>
-      <li><a href="index.html" class="activo">Registrar evento</a></li>
-    </ul>
-  </nav>
+  <!-- ══════════════════════════════════════════════════════════
+       Overlay de login – visible hasta que el usuario se autentique
+       ══════════════════════════════════════════════════════════ -->
+  <div id="login-overlay">
+    <div class="login-card">
+      <h2>Acceso restringido</h2>
+      <p>Ingresa tus credenciales para registrar eventos.</p>
 
-  <main class="contenedor">
-    <div class="encabezado-pagina">
-      <h1>Registrar evento</h1>
-      <p>Completa los datos del evento y la grilla de asistencia.</p>
+      <form id="form-login" novalidate>
+        <div class="campo">
+          <label for="login-email">Correo electrónico</label>
+          <input type="email" id="login-email" required autocomplete="email"
+                 placeholder="usuario@sectei.cdmx.gob.mx">
+        </div>
+        <div class="campo">
+          <label for="login-password">Contraseña</label>
+          <input type="password" id="login-password" required autocomplete="current-password"
+                 placeholder="••••••••">
+        </div>
+        <div id="login-error" class="error-msg" style="display:none;margin-bottom:.75rem"></div>
+        <button type="submit" class="btn btn-primario" id="btn-login"
+                style="width:100%;margin-top:.5rem">
+          Ingresar
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       Aplicación principal – oculta hasta autenticarse
+       ══════════════════════════════════════════════════════════ -->
+  <div id="app" style="display:none">
+
+    <nav class="navbar">
+      <a class="navbar__marca" href="../index.html">Eventos SECTEI</a>
+      <ul class="navbar__nav">
+        <li><a href="../geovisor.html">Geovisor</a></li>
+        <li><a href="../dashboard.html">Dashboard</a></li>
+        <li><a href="index.html" class="activo">Registrar evento</a></li>
+      </ul>
+    </nav>
+
+    <!-- Barra de usuario -->
+    <div class="barra-usuario">
+      <span id="usuario-email"></span>
+      <button class="btn btn-secundario" id="btn-cerrar-sesion"
+              style="font-size:.8rem;padding:.3rem .9rem">
+        Cerrar sesión
+      </button>
     </div>
 
-    <form id="form-evento" novalidate>
+    <main class="contenedor">
+      <div class="encabezado-pagina">
+        <h1>Registrar evento</h1>
+        <p>Completa los datos del evento y la grilla de asistencia.</p>
+      </div>
 
-      <!-- Sección 1: Datos del evento -->
-      <div class="form-seccion">
-        <h2>1. Datos del evento</h2>
-        <div class="campos-grid">
+      <form id="form-evento" novalidate>
 
-          <div class="campo">
-            <label for="nombre">Nombre del evento *</label>
-            <input type="text" id="nombre" required placeholder="Ej. Feria de Ciencia 2025">
+        <!-- ── Sección 1: Datos del evento ─────────────────── -->
+        <div class="form-seccion">
+          <h2>1. Datos del evento</h2>
+          <div class="campos-grid">
+
+            <!-- Tipo de evento -->
+            <div class="campo campo--ancho-completo">
+              <label>Tipo de evento *</label>
+              <div class="radio-grupo">
+                <label>
+                  <input type="radio" name="tipo_evento" value="serie" checked>
+                  Pertenece a una serie / programa
+                </label>
+                <label>
+                  <input type="radio" name="tipo_evento" value="unico">
+                  Evento único
+                </label>
+              </div>
+            </div>
+
+            <!-- Panel: evento de serie -->
+            <div id="panel-serie" class="panel-tipo visible">
+              <div class="campo">
+                <label for="serie_id">Serie / programa *</label>
+                <select id="serie_id">
+                  <option value="">— Selecciona una serie —</option>
+                </select>
+              </div>
+              <div class="campo">
+                <label for="nombre-sesion">Nombre de esta sesión *</label>
+                <input type="text" id="nombre-sesion"
+                       placeholder="Ej. Feria de Ciencia – Edición Primavera 2025">
+              </div>
+            </div>
+
+            <!-- Panel: evento único -->
+            <div id="panel-unico" class="panel-tipo">
+              <div class="campo">
+                <label for="nombre-unico">Nombre del evento *</label>
+                <input type="text" id="nombre-unico"
+                       placeholder="Ej. Congreso de Inteligencia Artificial CDMX">
+              </div>
+            </div>
+
+            <!-- Fecha -->
+            <div class="campo">
+              <label for="fecha">Fecha *</label>
+              <input type="date" id="fecha" required>
+            </div>
+
+            <!-- Alcaldía -->
+            <div class="campo">
+              <label for="municipio">Alcaldía</label>
+              <select id="municipio">
+                <option value="">— Selecciona una alcaldía —</option>
+              </select>
+            </div>
+
+            <!-- Nombre del lugar -->
+            <div class="campo">
+              <label for="nombre_lugar">Nombre del lugar</label>
+              <input type="text" id="nombre_lugar" placeholder="Ej. Centro Cultural Tlatelolco">
+            </div>
+
+            <!-- Temática -->
+            <div class="campo">
+              <label for="tematica">Temática</label>
+              <input type="text" id="tematica" placeholder="Ej. Robótica educativa">
+            </div>
+
+            <!-- Ponentes -->
+            <div class="campo campo--ancho-completo">
+              <label for="ponentes">Ponentes / invitados <small>(separar por comas)</small></label>
+              <input type="text" id="ponentes" placeholder="Ej. Dr. García, Mtra. López">
+            </div>
+
+            <!-- Notas -->
+            <div class="campo campo--ancho-completo">
+              <label for="notas">Notas adicionales</label>
+              <textarea id="notas" placeholder="Observaciones, contexto, etc."></textarea>
+            </div>
+
+            <!-- Coordenadas + mapa picker -->
+            <div class="coord-grupo">
+              <label>Ubicación en el mapa</label>
+              <p class="coord-hint">
+                Haz clic en el mapa para marcar la ubicación del evento.
+                También puedes arrastrar el marcador para ajustarla.
+              </p>
+              <div id="mapa-picker"></div>
+              <div class="coord-inputs">
+                <div class="campo">
+                  <label for="latitud">Latitud</label>
+                  <input type="number" id="latitud" step="any" readonly
+                         placeholder="Se llena al marcar en el mapa">
+                </div>
+                <div class="campo">
+                  <label for="longitud">Longitud</label>
+                  <input type="number" id="longitud" step="any" readonly
+                         placeholder="Se llena al marcar en el mapa">
+                </div>
+              </div>
+            </div>
+
           </div>
-
-          <div class="campo">
-            <label for="serie_id">Serie / programa</label>
-            <select id="serie_id">
-              <option value="">— Evento único —</option>
-            </select>
-          </div>
-
-          <div class="campo">
-            <label for="fecha">Fecha *</label>
-            <input type="date" id="fecha" required>
-          </div>
-
-          <div class="campo">
-            <label for="municipio">Municipio</label>
-            <input type="text" id="municipio" placeholder="Ej. Monterrey">
-          </div>
-
-          <div class="campo">
-            <label for="nombre_lugar">Nombre del lugar</label>
-            <input type="text" id="nombre_lugar" placeholder="Ej. Centro Cultural">
-          </div>
-
-          <div class="campo">
-            <label for="latitud">Latitud</label>
-            <input type="number" id="latitud" step="any" placeholder="25.6866">
-          </div>
-
-          <div class="campo">
-            <label for="longitud">Longitud</label>
-            <input type="number" id="longitud" step="any" placeholder="-100.3161">
-          </div>
-
-          <div class="campo">
-            <label for="tematica">Temática</label>
-            <input type="text" id="tematica" placeholder="Ej. Robótica educativa">
-          </div>
-
-          <div class="campo campo--ancho-completo">
-            <label for="ponentes">Ponentes / invitados <small>(separar por comas)</small></label>
-            <input type="text" id="ponentes" placeholder="Ej. Dr. García, Mtra. López">
-          </div>
-
-          <div class="campo campo--ancho-completo">
-            <label for="notas">Notas adicionales</label>
-            <textarea id="notas" placeholder="Observaciones, contexto, etc."></textarea>
-          </div>
-
         </div>
-      </div>
 
-      <!-- Sección 2: Asistencia -->
-      <div class="form-seccion">
-        <h2>2. Registro de asistencia</h2>
-        <p style="font-size:.85rem; color:var(--color-texto-suave); margin-bottom:1rem;">
-          Captura el número de asistentes por rango de edad, género y condición de discapacidad.
-          Deja en 0 los grupos sin asistentes.
-        </p>
-        <div style="overflow-x:auto;">
-          <table class="tabla-asistencia" id="tabla-asistencia"></table>
+        <!-- ── Sección 2: Asistencia ────────────────────────── -->
+        <div class="form-seccion">
+          <h2>2. Registro de asistencia</h2>
+          <p style="font-size:.85rem;color:var(--color-texto-suave);margin-bottom:1rem">
+            Captura el número de asistentes por rango de edad, género y condición de discapacidad.
+            Deja en 0 los grupos sin asistentes.
+          </p>
+          <div style="overflow-x:auto">
+            <table class="tabla-asistencia" id="tabla-asistencia"></table>
+          </div>
         </div>
-      </div>
 
-      <!-- Estado de envío -->
-      <div class="estado-envio" id="estado-envio"></div>
+        <!-- Estado de envío -->
+        <div class="estado-envio" id="estado-envio"></div>
 
-      <!-- Acciones -->
-      <div class="form-acciones">
-        <button type="reset" class="btn btn-secundario">Limpiar</button>
-        <button type="submit" class="btn btn-primario" id="btn-guardar">Guardar evento</button>
-      </div>
+        <!-- Acciones -->
+        <div class="form-acciones">
+          <button type="reset" class="btn btn-secundario">Limpiar</button>
+          <button type="submit" class="btn btn-primario" id="btn-guardar">Guardar evento</button>
+        </div>
 
-    </form>
-  </main>
+      </form>
+    </main>
 
-  <footer>
-    Secretaría de Ciencia, Tecnología e Innovación
-  </footer>
+    <footer>
+      Secretaría de Ciencia, Tecnología e Innovación
+    </footer>
+
+  </div><!-- /#app -->
+
 
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- MapLibre GL JS -->
+  <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
   <script src="../js/config.js"></script>
   <script src="../js/form.js"></script>
 </body>

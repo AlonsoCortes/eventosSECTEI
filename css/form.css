@@ -2,6 +2,57 @@
    Estilos del formulario de captura
    ===================================================== */
 
+/* --- Login overlay ---------------------------------- */
+#login-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 30, 55, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#login-overlay.oculto { display: none; }
+
+.login-card {
+  background: var(--color-superficie);
+  border-radius: calc(var(--radio) * 1.5);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+
+.login-card h2 {
+  color: var(--color-primario);
+  font-size: 1.3rem;
+  margin-bottom: .4rem;
+}
+
+.login-card p {
+  color: var(--color-texto-suave);
+  font-size: .87rem;
+  margin-bottom: 1.5rem;
+}
+
+.login-card .campo { margin-bottom: 1rem; }
+
+/* --- Barra de usuario autenticado ------------------- */
+.barra-usuario {
+  background: #e8f4fd;
+  border-bottom: 1px solid #c5dff0;
+  padding: .5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: .85rem;
+  color: var(--color-primario);
+}
+
+.barra-usuario span { font-weight: 600; }
+
+/* --- Secciones del formulario ----------------------- */
 .form-seccion {
   background: var(--color-superficie);
   border: 1px solid var(--color-borde);
@@ -19,7 +70,7 @@
   border-bottom: 2px solid var(--color-borde);
 }
 
-/* --- Campos --------------------------------------------- */
+/* --- Campos ----------------------------------------- */
 .campos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -61,11 +112,58 @@
 
 .campo textarea { resize: vertical; min-height: 80px; }
 
-.campo--ancho-completo {
-  grid-column: 1 / -1;
+.campo--ancho-completo { grid-column: 1 / -1; }
+
+/* --- Toggle tipo de evento -------------------------- */
+.radio-grupo {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
-/* --- Grilla de asistencia ------------------------------- */
+.radio-grupo label {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .9rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.radio-grupo input[type="radio"] { accent-color: var(--color-secundario); }
+
+/* Paneles que se muestran/ocultan según el tipo */
+.panel-tipo { display: none; }
+.panel-tipo.visible { display: contents; }
+
+/* --- Coordenadas / mapa picker ---------------------- */
+.coord-grupo {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.coord-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.coord-hint {
+  font-size: .8rem;
+  color: var(--color-texto-suave);
+}
+
+#mapa-picker {
+  width: 100%;
+  height: 320px;
+  border-radius: var(--radio);
+  border: 1px solid var(--color-borde);
+  cursor: crosshair;
+}
+
+/* --- Grilla de asistencia --------------------------- */
 .tabla-asistencia {
   width: 100%;
   border-collapse: collapse;
@@ -88,13 +186,8 @@
   font-weight: 600;
 }
 
-.tabla-asistencia th.grupo-sin {
-  background: var(--color-secundario);
-}
-
-.tabla-asistencia th.grupo-con {
-  background: #6c5ce7;
-}
+.tabla-asistencia th.grupo-sin { background: var(--color-secundario); }
+.tabla-asistencia th.grupo-con { background: #6c5ce7; }
 
 .tabla-asistencia td:first-child {
   text-align: left;
@@ -117,7 +210,7 @@
   border-color: var(--color-secundario);
 }
 
-/* --- Acciones del formulario ---------------------------- */
+/* --- Acciones del formulario ------------------------ */
 .form-acciones {
   display: flex;
   gap: 1rem;
@@ -146,6 +239,9 @@
 }
 
 @media (max-width: 600px) {
+  .login-card { margin: 1rem; }
   .campos-grid { grid-template-columns: 1fr; }
+  .coord-inputs { grid-template-columns: 1fr; }
   .form-acciones { flex-direction: column; }
+  #mapa-picker { height: 240px; }
 }
