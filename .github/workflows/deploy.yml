@@ -26,14 +26,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inyectar credenciales Supabase en config.js
+      - name: Generar config.js con credenciales Supabase
         env:
           SUPABASE_URL:  ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON: ${{ secrets.SUPABASE_ANON }}
         run: |
+          cat > js/config.js << 'EOF'
+          const SUPABASE_URL  = 'SUPABASE_URL_PLACEHOLDER';
+          const SUPABASE_ANON = 'SUPABASE_ANON_PLACEHOLDER';
+          const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+          EOF
           sed -i \
-            -e "s|https://TU-PROYECTO.supabase.co|${SUPABASE_URL}|g" \
-            -e "s|TU-ANON-KEY|${SUPABASE_ANON}|g" \
+            -e "s|SUPABASE_URL_PLACEHOLDER|${SUPABASE_URL}|g" \
+            -e "s|SUPABASE_ANON_PLACEHOLDER|${SUPABASE_ANON}|g" \
             js/config.js
 
       - name: Configurar GitHub Pages
