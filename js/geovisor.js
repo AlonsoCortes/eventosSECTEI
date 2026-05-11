@@ -27,18 +27,52 @@ function inicializarMapa() {
   });
 }
 
-// Agrega la fuente GeoJSON y las capas de puntos
+// Agrega la fuente GeoJSON y las capas de puntos con clustering
 function agregarFuenteYCapas() {
   mapa.addSource('eventos', {
     type: 'geojson',
     data: { type: 'FeatureCollection', features: [] },
+    cluster: true,
+    clusterMaxZoom: 14,
+    clusterRadius: 20,
   });
 
-  // Círculo de fondo
+  // Círculo del cluster — color y tamaño varían según cantidad de eventos
+  mapa.addLayer({
+    id:     'clusters',
+    type:   'circle',
+    source: 'eventos',
+    filter: ['has', 'point_count'],
+    paint:  {
+      'circle-color': ['step', ['get', 'point_count'],
+        '#2d7dd2', 5, '#e67e22', 20, '#e74c3c'],
+      'circle-radius': ['step', ['get', 'point_count'],
+        18, 5, 24, 20, 32],
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#fff',
+      'circle-opacity': 0.9,
+    },
+  });
+
+  // Etiqueta con conteo dentro del cluster
+  mapa.addLayer({
+    id:     'cluster-count',
+    type:   'symbol',
+    source: 'eventos',
+    filter: ['has', 'point_count'],
+    layout: {
+      'text-field': '{point_count_abbreviated}',
+      'text-size':  12,
+    },
+    paint: { 'text-color': '#fff' },
+  });
+
+  // Punto individual (fuera de cluster)
   mapa.addLayer({
     id:     'eventos-circulo',
     type:   'circle',
     source: 'eventos',
+    filter: ['!', ['has', 'point_count']],
     paint:  {
       'circle-radius':       8,
       'circle-color':        '#2d7dd2',
@@ -48,11 +82,12 @@ function agregarFuenteYCapas() {
     },
   });
 
-  // Etiqueta con conteo de asistentes
+  // Etiqueta de asistentes en punto individual
   mapa.addLayer({
     id:     'eventos-etiqueta',
     type:   'symbol',
     source: 'eventos',
+    filter: ['!', ['has', 'point_count']],
     layout: {
       'text-field':  ['get', 'total_asistentes'],
       'text-size':   10,
@@ -61,7 +96,17 @@ function agregarFuenteYCapas() {
     paint: { 'text-color': '#1e2432' },
   });
 
-  // Popup al hacer click en un punto
+  // Click en cluster → zoom in para expandir
+  mapa.on('click', 'clusters', (e) => {
+    const features = mapa.queryRenderedFeatures(e.point, { layers: ['clusters'] });
+    const clusterId = features[0].properties.cluster_id;
+    mapa.getSource('eventos').getClusterExpansionZoom(clusterId, (err, zoom) => {
+      if (err) return;
+      mapa.easeTo({ center: features[0].geometry.coordinates, zoom });
+    });
+  });
+
+  // Popup al hacer click en un punto individual
   mapa.on('click', 'eventos-circulo', (e) => {
     const props = e.features[0].properties;
     const coords = e.features[0].geometry.coordinates.slice();
@@ -81,11 +126,9 @@ function agregarFuenteYCapas() {
       .addTo(mapa);
   });
 
-  mapa.on('mouseenter', 'eventos-circulo', () => {
-    mapa.getCanvas().style.cursor = 'pointer';
-  });
-  mapa.on('mouseleave', 'eventos-circulo', () => {
-    mapa.getCanvas().style.cursor = '';
+  ['clusters', 'eventos-circulo'].forEach(layer => {
+    mapa.on('mouseenter', layer, () => { mapa.getCanvas().style.cursor = 'pointer'; });
+    mapa.on('mouseleave', layer, () => { mapa.getCanvas().style.cursor = ''; });
   });
 }
 
