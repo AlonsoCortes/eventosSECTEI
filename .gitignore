@@ -1,6 +1,6 @@
 # Credenciales locales (nunca subir al repositorio)
-js/config.js
-js/config.local.js
+assets/js/config.js
+assets/js/config.local.js
 
 # Sistema operativo
 .DS_Store

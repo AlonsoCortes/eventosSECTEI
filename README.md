@@ -28,18 +28,21 @@ eventosSECTEI/
 ├── index.html              ← Página de inicio / KPIs
 ├── geovisor.html           ← Mapa interactivo
 ├── dashboard.html          ← Dashboard de indicadores
-├── form/
-│   └── index.html          ← Formulario de captura (acceso restringido)
-├── css/
-│   ├── main.css            ← Estilos globales
-│   ├── geovisor.css
-│   ├── dashboard.css
-│   └── form.css
-├── js/
-│   ├── config.js           ← Credenciales Supabase (NO subir al repo)
-│   ├── geovisor.js
-│   ├── dashboard.js
-│   └── form.js
+├── assets/
+│   ├── css/
+│   │   ├── main.css        ← Estilos globales
+│   │   ├── geovisor.css
+│   │   ├── dashboard.css
+│   │   └── form.css
+│   ├── js/
+│   │   ├── config.js       ← Credenciales Supabase (NO subir al repo)
+│   │   ├── geovisor.js
+│   │   ├── dashboard.js
+│   │   └── form.js
+│   ├── form/
+│   │   └── index.html      ← Formulario de captura (acceso restringido)
+│   └── img/
+│       └── logos/          ← Logotipos institucionales
 ├── sql/
 │   └── schema.sql          ← DDL completo para ejecutar en Supabase
 └── .github/
@@ -47,7 +50,7 @@ eventosSECTEI/
         └── deploy.yml      ← CI/CD: inyecta credenciales y despliega a GitHub Pages
 ```
 
-> `js/config.js` está en `.gitignore`. Las credenciales reales se inyectan en producción
+> `assets/js/config.js` está en `.gitignore`. Las credenciales reales se inyectan en producción
 > vía GitHub Secrets (`SUPABASE_URL` y `SUPABASE_ANON`) durante el deploy.
 
 ## Configuración inicial
@@ -61,7 +64,7 @@ eventosSECTEI/
 
 ### 2. Credenciales locales
 
-Crear o editar `js/config.js` con los valores de tu proyecto Supabase (**Settings → API**):
+Crear o editar `assets/js/config.js` con los valores de tu proyecto Supabase (**Settings → API**):
 
 ```js
 const SUPABASE_URL  = 'https://TU-PROYECTO.supabase.co';

@@ -31,7 +31,7 @@ jobs:
           SUPABASE_URL:  ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON: ${{ secrets.SUPABASE_ANON }}
         run: |
-          cat > js/config.js << 'EOF'
+          cat > assets/js/config.js << 'EOF'
           const SUPABASE_URL  = 'SUPABASE_URL_PLACEHOLDER';
           const SUPABASE_ANON = 'SUPABASE_ANON_PLACEHOLDER';
           const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
@@ -39,7 +39,7 @@ jobs:
           sed -i \
             -e "s|SUPABASE_URL_PLACEHOLDER|${SUPABASE_URL}|g" \
             -e "s|SUPABASE_ANON_PLACEHOLDER|${SUPABASE_ANON}|g" \
-            js/config.js
+            assets/js/config.js
 
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5

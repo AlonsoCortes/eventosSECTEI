@@ -4,19 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Geovisor – Eventos SECTEI</title>
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/geovisor.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/geovisor.css">
   <!-- MapLibre GL CSS -->
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css">
 </head>
 <body>
 
   <nav class="navbar">
-    <a class="navbar__marca" href="index.html">Eventos SECTEI</a>
+    <div class="navbar__logos">
+      <a href="index.html">
+        <img src="assets/img/logos/Logo_CDMX.png" alt="Ciudad de México" class="navbar__logo">
+      </a>
+      <img src="assets/img/logos/Logo_Dependencia.png"
+           alt="Secretaría de Educación, Ciencia, Tecnología e Innovación" class="navbar__logo">
+    </div>
     <ul class="navbar__nav">
       <li><a href="geovisor.html" class="activo">Geovisor</a></li>
       <li><a href="dashboard.html">Dashboard</a></li>
-      <li><a href="form/index.html">Registrar evento</a></li>
+      <li><a href="assets/form/index.html" class="btn-registrar">+ Registrar</a></li>
     </ul>
   </nav>
 
@@ -40,7 +46,7 @@
           <label for="filtro-fecha-hasta">Hasta</label>
           <input type="date" id="filtro-fecha-hasta">
         </div>
-        <button class="btn btn-secundario" id="btn-limpiar-filtros" style="width:100%;margin-top:.5rem">
+        <button class="btn btn-secundario" id="btn-limpiar-filtros" style="width:100%;margin-top:.25rem;padding:.3rem .75rem;font-size:.8rem">
           Limpiar filtros
         </button>
       </div>
@@ -60,7 +66,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <!-- MapLibre GL JS -->
   <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
-  <script src="js/config.js"></script>
-  <script src="js/geovisor.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/geovisor.js"></script>
 </body>
 </html>

@@ -4,17 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard – Eventos SECTEI</title>
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
 </head>
 <body>
 
   <nav class="navbar">
-    <a class="navbar__marca" href="index.html">Eventos SECTEI</a>
+    <div class="navbar__logos">
+      <a href="index.html">
+        <img src="assets/img/logos/Logo_CDMX.png" alt="Ciudad de México" class="navbar__logo">
+      </a>
+      <img src="assets/img/logos/Logo_Dependencia.png"
+           alt="Secretaría de Educación, Ciencia, Tecnología e Innovación" class="navbar__logo">
+    </div>
     <ul class="navbar__nav">
       <li><a href="geovisor.html">Geovisor</a></li>
       <li><a href="dashboard.html" class="activo">Dashboard</a></li>
-      <li><a href="form/index.html">Registrar evento</a></li>
+      <li><a href="assets/form/index.html" class="btn-registrar">+ Registrar</a></li>
     </ul>
   </nav>
 
@@ -96,7 +102,7 @@
   <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <!-- Observable Plot -->
   <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6.16/dist/plot.umd.min.js"></script>
-  <script src="js/config.js"></script>
-  <script src="js/dashboard.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/dashboard.js"></script>
 </body>
 </html>

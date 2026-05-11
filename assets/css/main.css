@@ -3,9 +3,9 @@
    ===================================================== */
 
 :root {
-  --color-primario:    #1a4a7a;
-  --color-secundario:  #2d7dd2;
-  --color-acento:      #f4a620;
+  --color-primario:    #7d1f3c;
+  --color-secundario:  #a0294f;
+  --color-acento:      #c8943a;
   --color-fondo:       #f5f7fa;
   --color-superficie:  #ffffff;
   --color-texto:       #1e2432;
@@ -35,35 +35,38 @@ body {
 
 /* --- Navbar ----------------------------------------- */
 .navbar {
-  background: var(--color-primario);
-  color: #fff;
+  background: #fff;
   padding: 0 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
-  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  height: 72px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  border-bottom: 1px solid var(--color-borde);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.navbar__marca {
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: .5px;
-  text-decoration: none;
-  color: inherit;
+.navbar__logos {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__logo {
+  height: 48px;
+  display: block;
 }
 
 .navbar__nav {
   display: flex;
+  align-items: center;
   gap: 1.5rem;
   list-style: none;
 }
 
 .navbar__nav a {
-  color: rgba(255,255,255,.85);
+  color: var(--color-texto);
   text-decoration: none;
   font-size: .9rem;
   transition: color .2s;
@@ -71,9 +74,24 @@ body {
 
 .navbar__nav a:hover,
 .navbar__nav a.activo {
-  color: #fff;
-  border-bottom: 2px solid var(--color-acento);
+  color: var(--color-primario);
+  border-bottom: 2px solid var(--color-primario);
   padding-bottom: 2px;
+}
+
+.btn-registrar {
+  background: var(--color-primario);
+  color: #fff !important;
+  padding: .45rem 1.1rem;
+  border-radius: var(--radio);
+  font-weight: 600;
+  border-bottom: none !important;
+  transition: background .2s;
+}
+
+.btn-registrar:hover {
+  background: var(--color-secundario);
+  color: #fff !important;
 }
 
 /* --- Contenedor principal --------------------------- */
@@ -242,7 +260,8 @@ footer {
 }
 
 @media (max-width: 600px) {
-  .navbar { padding: 0 1rem; }
-  .navbar__nav { gap: 1rem; }
+  .navbar { padding: 0 1rem; height: auto; flex-wrap: wrap; gap: .5rem; padding-block: .5rem; }
+  .navbar__logo { height: 36px; }
+  .navbar__nav { gap: .75rem; }
   .contenedor { padding: 1.25rem 1rem; }
 }

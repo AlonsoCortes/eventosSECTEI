@@ -4,16 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eventos SECTEI</title>
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
 
   <nav class="navbar">
-    <a class="navbar__marca" href="index.html">Eventos SECTEI</a>
+    <div class="navbar__logos">
+      <a href="index.html">
+        <img src="assets/img/logos/Logo_CDMX.png" alt="Ciudad de México" class="navbar__logo">
+      </a>
+      <img src="assets/img/logos/Logo_Dependencia.png"
+           alt="Secretaría de Educación, Ciencia, Tecnología e Innovación" class="navbar__logo">
+    </div>
     <ul class="navbar__nav">
       <li><a href="geovisor.html">Geovisor</a></li>
       <li><a href="dashboard.html">Dashboard</a></li>
-      <li><a href="form/index.html">Registrar evento</a></li>
+      <li><a href="assets/form/index.html" class="btn-registrar">+ Registrar</a></li>
     </ul>
   </nav>
 
@@ -51,7 +57,7 @@
         <span class="tarjeta-nav__titulo">Dashboard</span>
         <span class="tarjeta-nav__desc">Indicadores de asistencia por género, edad y discapacidad.</span>
       </a>
-      <a class="tarjeta-nav" href="form/index.html">
+      <a class="tarjeta-nav" href="assets/form/index.html">
         <span class="tarjeta-nav__icono">📝</span>
         <span class="tarjeta-nav__titulo">Registrar evento</span>
         <span class="tarjeta-nav__desc">Captura un nuevo evento y sus datos de asistencia.</span>
@@ -65,7 +71,7 @@
 
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="js/config.js"></script>
+  <script src="assets/js/config.js"></script>
   <script>
     async function cargarKPIs() {
       try {
