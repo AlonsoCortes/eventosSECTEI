@@ -71,9 +71,9 @@
       try {
         const [{ count: totalEventos }, { data: asistencia }, { data: municipiosData }] =
           await Promise.all([
-            supabase.from('eventos').select('*', { count: 'exact', head: true }),
-            supabase.from('asistencia').select('conteo'),
-            supabase.from('eventos').select('municipio'),
+            supabaseClient.from('eventos').select('*', { count: 'exact', head: true }),
+            supabaseClient.from('asistencia').select('conteo'),
+            supabaseClient.from('eventos').select('municipio'),
           ]);
 
         const totalAsistentes = (asistencia || []).reduce((s, r) => s + (r.conteo || 0), 0);

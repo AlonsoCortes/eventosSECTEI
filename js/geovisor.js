@@ -2,9 +2,9 @@
 
 const ESTILO_MAPA = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
 
-// Centro inicial: Monterrey, Nuevo León
-const CENTRO_INICIAL = [-100.316, 25.6866];
-const ZOOM_INICIAL   = 8;
+// Centro inicial: Ciudad de México
+const CENTRO_INICIAL = [-99.1332, 19.4326];
+const ZOOM_INICIAL   = 10;
 
 let mapa;
 let todosLosEventos = [];
@@ -92,7 +92,7 @@ function agregarFuenteYCapas() {
 // Carga eventos desde Supabase con totales de asistencia
 async function cargarEventos() {
   try {
-    const { data: eventos, error } = await supabase
+    const { data: eventos, error } = await supabaseClient
       .from('eventos')
       .select(`
         id, nombre, fecha, nombre_lugar, latitud, longitud, municipio, tematica,

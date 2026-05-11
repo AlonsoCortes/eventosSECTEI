@@ -7,8 +7,8 @@ let datosEventos    = [];
 
 async function cargarDatos() {
   const [{ data: eventos }, { data: asistencia }] = await Promise.all([
-    supabase.from('eventos').select('id, nombre, fecha, municipio').order('fecha', { ascending: false }),
-    supabase.from('asistencia').select('evento_id, genero, tiene_discapacidad, rango_edad, conteo'),
+    supabaseClient.from('eventos').select('id, nombre, fecha, municipio').order('fecha', { ascending: false }),
+    supabaseClient.from('asistencia').select('evento_id, genero, tiene_discapacidad, rango_edad, conteo'),
   ]);
 
   datosEventos    = eventos    || [];

@@ -8,27 +8,18 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 
 -- -------------------------------------------------------------
--- Tabla: series_eventos
--- Series o programas de eventos recurrentes
--- -------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS series_eventos (
-    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    nombre      TEXT NOT NULL,
-    descripcion TEXT,
-    creado_en   TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
-
--- -------------------------------------------------------------
 -- Tabla: eventos
--- Cada instancia concreta de evento
+-- Cada instancia concreta de evento (único o parte de un programa)
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS eventos (
     id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    serie_id     UUID REFERENCES series_eventos(id) ON DELETE SET NULL,
-    nombre       TEXT NOT NULL,
+    nombre_serie TEXT,                  -- NULL = evento único; texto = programa recurrente
+    nombre       TEXT NOT NULL,         -- Nombre específico de esta edición / sesión
     fecha        DATE NOT NULL,
     nombre_lugar TEXT,
+    calle        TEXT,
+    numero       TEXT,
+    colonia      TEXT,
     latitud      FLOAT8,
     longitud     FLOAT8,
     municipio    TEXT,
@@ -38,8 +29,8 @@ CREATE TABLE IF NOT EXISTS eventos (
     creado_en    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_eventos_fecha    ON eventos(fecha);
-CREATE INDEX IF NOT EXISTS idx_eventos_serie_id ON eventos(serie_id);
+CREATE INDEX IF NOT EXISTS idx_eventos_fecha        ON eventos(fecha);
+CREATE INDEX IF NOT EXISTS idx_eventos_nombre_serie ON eventos(nombre_serie);
 
 
 -- -------------------------------------------------------------
@@ -70,15 +61,10 @@ CREATE INDEX IF NOT EXISTS idx_asistencia_evento_id ON asistencia(evento_id);
 -- Row Level Security (RLS)
 -- =============================================================
 
-ALTER TABLE series_eventos ENABLE ROW LEVEL SECURITY;
-ALTER TABLE eventos         ENABLE ROW LEVEL SECURITY;
-ALTER TABLE asistencia      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE eventos    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE asistencia ENABLE ROW LEVEL SECURITY;
 
 -- Lectura pública (anon key puede leer)
-CREATE POLICY "Lectura pública series_eventos"
-    ON series_eventos FOR SELECT
-    USING (true);
-
 CREATE POLICY "Lectura pública eventos"
     ON eventos FOR SELECT
     USING (true);
@@ -100,5 +86,24 @@ CREATE POLICY "Inserción autenticada asistencia"
     TO authenticated
     WITH CHECK (true);
 
--- Las series las gestionan los administradores desde el Dashboard de Supabase;
--- los capturistas solo pueden leerlas para seleccionarlas en el formulario.
+
+-- =============================================================
+-- Script de migración (solo si ya existen datos en la BD)
+-- Ejecutar por separado en el SQL Editor si es necesario
+-- =============================================================
+--
+-- ALTER TABLE eventos ADD COLUMN nombre_serie TEXT;
+-- ALTER TABLE eventos ADD COLUMN calle   TEXT;
+-- ALTER TABLE eventos ADD COLUMN numero  TEXT;
+-- ALTER TABLE eventos ADD COLUMN colonia TEXT;
+--
+-- UPDATE eventos e
+-- SET nombre_serie = s.nombre
+-- FROM series_eventos s
+-- WHERE e.serie_id = s.id;
+--
+-- ALTER TABLE eventos DROP COLUMN serie_id;
+--
+-- DROP POLICY IF EXISTS "Lectura pública series_eventos"       ON series_eventos;
+-- DROP POLICY IF EXISTS "Inserción autenticada series_eventos" ON series_eventos;
+-- DROP TABLE IF EXISTS series_eventos;

@@ -89,20 +89,33 @@
                   Evento único
                 </label>
               </div>
+              <p class="ayuda-campo">
+                Elige <strong>Serie / programa</strong> si el evento es parte de un ciclo recurrente
+                (ej. Zócalo de las Ciencias, Talleres). Elige <strong>Evento único</strong> si es
+                una actividad independiente que no se repite bajo el mismo nombre.
+              </p>
             </div>
 
             <!-- Panel: evento de serie -->
             <div id="panel-serie" class="panel-tipo visible">
               <div class="campo">
-                <label for="serie_id">Serie / programa *</label>
-                <select id="serie_id">
-                  <option value="">— Selecciona una serie —</option>
-                </select>
+                <label for="nombre-serie">Programa / serie *</label>
+                <input type="text" id="nombre-serie"
+                       list="datalist-series" autocomplete="off"
+                       placeholder="Ej. Zócalo de las Ciencias">
+                <datalist id="datalist-series"></datalist>
+                <p class="ayuda-campo">
+                  Escribe el nombre del programa. Si ya existe aparecerá como sugerencia;
+                  si es nuevo, escríbelo completo y quedará disponible para futuras sesiones.
+                </p>
               </div>
               <div class="campo">
                 <label for="nombre-sesion">Nombre de esta sesión *</label>
                 <input type="text" id="nombre-sesion"
-                       placeholder="Ej. Feria de Ciencia – Edición Primavera 2025">
+                       placeholder="Ej. Zócalo de las Ciencias – Edición Mayo 2025">
+                <p class="ayuda-campo">
+                  Nombre específico de esta edición o sesión dentro del programa.
+                </p>
               </div>
             </div>
 
@@ -112,6 +125,9 @@
                 <label for="nombre-unico">Nombre del evento *</label>
                 <input type="text" id="nombre-unico"
                        placeholder="Ej. Congreso de Inteligencia Artificial CDMX">
+                <p class="ayuda-campo">
+                  Nombre completo del evento. Al ser único no se agrupa con otros.
+                </p>
               </div>
             </div>
 
@@ -135,6 +151,23 @@
               <input type="text" id="nombre_lugar" placeholder="Ej. Centro Cultural Tlatelolco">
             </div>
 
+            <!-- Calle y número -->
+            <div class="campo">
+              <label for="calle">Calle / avenida</label>
+              <input type="text" id="calle" placeholder="Ej. Av. Ricardo Flores Magón">
+            </div>
+
+            <div class="campo">
+              <label for="numero">Número exterior</label>
+              <input type="text" id="numero" placeholder="Ej. 1">
+            </div>
+
+            <!-- Colonia -->
+            <div class="campo">
+              <label for="colonia">Colonia</label>
+              <input type="text" id="colonia" placeholder="Ej. Nonoalco Tlatelolco">
+            </div>
+
             <!-- Temática -->
             <div class="campo">
               <label for="tematica">Temática</label>
@@ -156,10 +189,26 @@
             <!-- Coordenadas + mapa picker -->
             <div class="coord-grupo">
               <label>Ubicación en el mapa</label>
+
+              <!-- Buscador de geocodificación -->
+              <div class="geocoding-wrapper">
+                <div class="geocoding-buscador">
+                  <input type="text" id="geocoding-input" autocomplete="off"
+                         placeholder="Ej. Av. Ricardo Flores Magón 1, Nonoalco Tlatelolco">
+                  <button type="button" id="btn-autorellenar" class="btn btn-secundario btn-sm">
+                    Usar dirección
+                  </button>
+                  <button type="button" id="btn-geocoding" class="btn btn-primario btn-sm">
+                    Buscar
+                  </button>
+                </div>
+                <ul id="geocoding-resultados" class="geocoding-resultados" style="display:none"></ul>
+              </div>
               <p class="coord-hint">
-                Haz clic en el mapa para marcar la ubicación del evento.
-                También puedes arrastrar el marcador para ajustarla.
+                Escribe o busca la dirección para posicionar el mapa. Luego haz clic en el mapa
+                o arrastra el marcador para confirmar el punto exacto.
               </p>
+
               <div id="mapa-picker"></div>
               <div class="coord-inputs">
                 <div class="campo">

@@ -112,6 +112,13 @@
 
 .campo textarea { resize: vertical; min-height: 80px; }
 
+.ayuda-campo {
+  font-size: .78rem;
+  color: var(--color-texto-suave);
+  margin: 0;
+  line-height: 1.4;
+}
+
 .campo--ancho-completo { grid-column: 1 / -1; }
 
 /* --- Toggle tipo de evento -------------------------- */
@@ -135,6 +142,77 @@
 /* Paneles que se muestran/ocultan según el tipo */
 .panel-tipo { display: none; }
 .panel-tipo.visible { display: contents; }
+
+/* --- Botón pequeño ---------------------------------- */
+.btn-sm {
+  font-size: .8rem;
+  padding: .35rem .75rem;
+  white-space: nowrap;
+}
+
+/* --- Geocodificación -------------------------------- */
+.geocoding-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.geocoding-buscador {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.geocoding-buscador input {
+  flex: 1;
+  min-width: 180px;
+  padding: .5rem .75rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  font-size: .9rem;
+  font-family: var(--fuente);
+  color: var(--color-texto);
+  background: var(--color-fondo);
+  transition: border-color .2s;
+}
+
+.geocoding-buscador input:focus {
+  outline: none;
+  border-color: var(--color-secundario);
+  background: #fff;
+}
+
+.geocoding-resultados {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12);
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.geocoding-resultados li {
+  padding: .55rem .75rem;
+  font-size: .82rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-borde);
+  line-height: 1.4;
+  color: var(--color-texto);
+}
+
+.geocoding-resultados li:last-child { border-bottom: none; }
+.geocoding-resultados li:hover { background: #f0f7ff; }
+
+.geocoding-sin-resultado {
+  color: var(--color-texto-suave) !important;
+  cursor: default !important;
+}
+.geocoding-sin-resultado:hover { background: none !important; }
 
 /* --- Coordenadas / mapa picker ---------------------- */
 .coord-grupo {

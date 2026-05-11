@@ -34,7 +34,7 @@ jobs:
           cat > js/config.js << 'EOF'
           const SUPABASE_URL  = 'SUPABASE_URL_PLACEHOLDER';
           const SUPABASE_ANON = 'SUPABASE_ANON_PLACEHOLDER';
-          const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+          const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
           EOF
           sed -i \
             -e "s|SUPABASE_URL_PLACEHOLDER|${SUPABASE_URL}|g" \

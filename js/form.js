@@ -33,11 +33,10 @@ let marcador    = null;
 
 // ── Autenticación ─────────────────────────────────────────────
 async function verificarSesion() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabaseClient.auth.getSession();
   if (session) {
     mostrarApp(session.user.email);
   }
-  // Si no hay sesión el overlay ya está visible por defecto
 }
 
 function mostrarApp(email) {
@@ -45,7 +44,6 @@ function mostrarApp(email) {
   document.getElementById('app').style.display = 'block';
   document.getElementById('usuario-email').textContent = email;
 
-  // Inicializar mapa una vez que el contenedor es visible
   if (!mapaPicker) inicializarMapaPicker();
 }
 
@@ -58,7 +56,7 @@ document.getElementById('form-login').addEventListener('submit', async (e) => {
   btnLogin.disabled = true;
   btnLogin.textContent = 'Ingresando…';
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
     email:    document.getElementById('login-email').value.trim(),
     password: document.getElementById('login-password').value,
   });
@@ -76,7 +74,7 @@ document.getElementById('form-login').addEventListener('submit', async (e) => {
 
 // Cerrar sesión
 document.getElementById('btn-cerrar-sesion').addEventListener('click', async () => {
-  await supabase.auth.signOut();
+  await supabaseClient.auth.signOut();
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-overlay').classList.remove('oculto');
   document.getElementById('login-password').value = '';
@@ -89,11 +87,10 @@ document.querySelectorAll('input[name="tipo_evento"]').forEach(radio => {
     const esSerie = radio.value === 'serie' && radio.checked;
     document.getElementById('panel-serie').classList.toggle('visible', esSerie);
     document.getElementById('panel-unico').classList.toggle('visible', !esSerie);
-    // Limpiar campos del panel oculto
     if (esSerie) {
       document.getElementById('nombre-unico').value = '';
     } else {
-      document.getElementById('serie_id').value = '';
+      document.getElementById('nombre-serie').value = '';
       document.getElementById('nombre-sesion').value = '';
     }
   });
@@ -107,20 +104,46 @@ function poblarAlcaldias() {
 }
 
 
-// ── Series de eventos ─────────────────────────────────────────
-async function cargarSeries() {
-  const { data, error } = await supabase
-    .from('series_eventos')
-    .select('id, nombre')
-    .order('nombre');
+// ── Nombres de programas / series ─────────────────────────────
+async function cargarNombresSeries() {
+  const { data } = await supabaseClient
+    .from('eventos')
+    .select('nombre_serie')
+    .not('nombre_serie', 'is', null)
+    .order('nombre_serie');
 
-  if (error || !data) return;
-  const select = document.getElementById('serie_id');
-  data.forEach(s => select.appendChild(new Option(s.nombre, s.id)));
+  if (!data) return;
+  const datalist = document.getElementById('datalist-series');
+  const vistos = new Set();
+  data.forEach(({ nombre_serie }) => {
+    if (nombre_serie && !vistos.has(nombre_serie)) {
+      vistos.add(nombre_serie);
+      datalist.appendChild(new Option(nombre_serie));
+    }
+  });
 }
 
 
 // ── Mapa picker de coordenadas ────────────────────────────────
+function colocarMarcador(lat, lng) {
+  document.getElementById('latitud').value  = lat.toFixed(6);
+  document.getElementById('longitud').value = lng.toFixed(6);
+
+  if (marcador) {
+    marcador.setLngLat([lng, lat]);
+  } else {
+    marcador = new maplibregl.Marker({ color: '#2d7dd2', draggable: true })
+      .setLngLat([lng, lat])
+      .addTo(mapaPicker);
+
+    marcador.on('dragend', () => {
+      const pos = marcador.getLngLat();
+      document.getElementById('latitud').value  = pos.lat.toFixed(6);
+      document.getElementById('longitud').value = pos.lng.toFixed(6);
+    });
+  }
+}
+
 function inicializarMapaPicker() {
   mapaPicker = new maplibregl.Map({
     container: 'mapa-picker',
@@ -133,25 +156,90 @@ function inicializarMapaPicker() {
 
   mapaPicker.on('click', (e) => {
     const { lng, lat } = e.lngLat;
-
-    document.getElementById('latitud').value  = lat.toFixed(6);
-    document.getElementById('longitud').value = lng.toFixed(6);
-
-    if (marcador) {
-      marcador.setLngLat([lng, lat]);
-    } else {
-      marcador = new maplibregl.Marker({ color: '#2d7dd2', draggable: true })
-        .setLngLat([lng, lat])
-        .addTo(mapaPicker);
-
-      // También actualizar coords al arrastrar el marcador
-      marcador.on('dragend', () => {
-        const pos = marcador.getLngLat();
-        document.getElementById('latitud').value  = pos.lat.toFixed(6);
-        document.getElementById('longitud').value = pos.lng.toFixed(6);
-      });
-    }
+    colocarMarcador(lat, lng);
   });
+}
+
+
+// ── Geocodificación (Nominatim / OpenStreetMap) ───────────────
+async function buscarDireccion() {
+  const query = document.getElementById('geocoding-input').value.trim();
+  if (!query) return;
+
+  const btnBuscar   = document.getElementById('btn-geocoding');
+  const resultadosEl = document.getElementById('geocoding-resultados');
+  btnBuscar.disabled    = true;
+  btnBuscar.textContent = 'Buscando…';
+  resultadosEl.innerHTML    = '';
+  resultadosEl.style.display = 'none';
+
+  try {
+    const params = new URLSearchParams({
+      q:            `${query}, Ciudad de México, México`,
+      format:       'json',
+      countrycodes: 'mx',
+      limit:        '5',
+      addressdetails: '1',
+    });
+    const resp       = await fetch(`https://nominatim.openstreetmap.org/search?${params}`);
+    const resultados = await resp.json();
+    mostrarResultadosGeocodificacion(resultados);
+  } catch {
+    const li = document.createElement('li');
+    li.className   = 'geocoding-sin-resultado';
+    li.textContent = 'Error de conexión. Verifica tu internet e intenta de nuevo.';
+    resultadosEl.appendChild(li);
+    resultadosEl.style.display = 'block';
+  } finally {
+    btnBuscar.disabled    = false;
+    btnBuscar.textContent = 'Buscar';
+  }
+}
+
+function mostrarResultadosGeocodificacion(resultados) {
+  const el = document.getElementById('geocoding-resultados');
+  el.innerHTML = '';
+
+  if (resultados.length === 0) {
+    const li = document.createElement('li');
+    li.className   = 'geocoding-sin-resultado';
+    li.textContent = 'No se encontró la dirección. Intenta con otro texto o marca el punto directamente en el mapa.';
+    el.appendChild(li);
+    el.style.display = 'block';
+    return;
+  }
+
+  resultados.forEach(r => {
+    const li = document.createElement('li');
+    li.textContent = r.display_name;
+    li.addEventListener('click', () => {
+      seleccionarResultado(parseFloat(r.lat), parseFloat(r.lon));
+    });
+    el.appendChild(li);
+  });
+
+  el.style.display = 'block';
+}
+
+function seleccionarResultado(lat, lng) {
+  colocarMarcador(lat, lng);
+  mapaPicker.flyTo({ center: [lng, lat], zoom: 17, essential: true });
+  document.getElementById('geocoding-resultados').style.display = 'none';
+}
+
+function autorellenarBusqueda() {
+  const calle     = document.getElementById('calle').value.trim();
+  const numero    = document.getElementById('numero').value.trim();
+  const colonia   = document.getElementById('colonia').value.trim();
+  const municipio = document.getElementById('municipio').value;
+  const partes = [
+    calle && numero ? `${calle} ${numero}` : calle,
+    colonia,
+    municipio,
+  ].filter(Boolean);
+  if (partes.length > 0) {
+    document.getElementById('geocoding-input').value = partes.join(', ');
+  }
 }
 
 
@@ -230,12 +318,13 @@ document.getElementById('form-evento').addEventListener('submit', async (e) => {
   btnGuardar.disabled  = true;
   estado.style.display = 'none';
 
-  // Determinar nombre y serie según tipo elegido
   const esSerie = document.querySelector('input[name="tipo_evento"]:checked').value === 'serie';
   const nombre  = esSerie
     ? document.getElementById('nombre-sesion').value.trim()
     : document.getElementById('nombre-unico').value.trim();
-  const serieId = esSerie ? (document.getElementById('serie_id').value || null) : null;
+  const nombreSerie = esSerie
+    ? document.getElementById('nombre-serie').value.trim() || null
+    : null;
 
   if (!nombre) {
     estado.textContent   = 'El nombre del evento es obligatorio.';
@@ -251,10 +340,13 @@ document.getElementById('form-evento').addEventListener('submit', async (e) => {
     : null;
 
   const evento = {
-    serie_id:     serieId,
+    nombre_serie: nombreSerie,
     nombre,
     fecha:        document.getElementById('fecha').value,
     nombre_lugar: document.getElementById('nombre_lugar').value.trim() || null,
+    calle:        document.getElementById('calle').value.trim()        || null,
+    numero:       document.getElementById('numero').value.trim()       || null,
+    colonia:      document.getElementById('colonia').value.trim()      || null,
     latitud:      parseFloat(document.getElementById('latitud').value)  || null,
     longitud:     parseFloat(document.getElementById('longitud').value) || null,
     municipio:    document.getElementById('municipio').value || null,
@@ -265,30 +357,37 @@ document.getElementById('form-evento').addEventListener('submit', async (e) => {
 
   try {
     const { data: eventoCreado, error: errEvento } =
-      await supabase.from('eventos').insert(evento).select('id').single();
+      await supabaseClient.from('eventos').insert(evento).select('id').single();
 
     if (errEvento) throw errEvento;
 
     const filas = recogerAsistencia(eventoCreado.id);
     if (filas.length > 0) {
-      const { error: errAsistencia } = await supabase.from('asistencia').insert(filas);
+      const { error: errAsistencia } = await supabaseClient.from('asistencia').insert(filas);
       if (errAsistencia) throw errAsistencia;
+    }
+
+    // Agregar el nombre de serie al datalist si es nuevo
+    if (nombreSerie) {
+      const datalist = document.getElementById('datalist-series');
+      const yaExiste = [...datalist.options].some(o => o.value === nombreSerie);
+      if (!yaExiste) datalist.appendChild(new Option(nombreSerie));
     }
 
     estado.textContent   = '¡Evento registrado exitosamente!';
     estado.className     = 'estado-envio exito';
     estado.style.display = 'block';
     e.target.reset();
-    // Restaurar grilla
     document.querySelectorAll('#tabla-asistencia input[type="number"]')
       .forEach(i => { i.value = '0'; });
-    // Restaurar marcador y coords
     if (marcador) { marcador.remove(); marcador = null; }
     document.getElementById('latitud').value  = '';
     document.getElementById('longitud').value = '';
-    // Restaurar panel de tipo
+    document.getElementById('geocoding-input').value = '';
+    document.getElementById('geocoding-resultados').style.display = 'none';
     document.getElementById('panel-serie').classList.add('visible');
     document.getElementById('panel-unico').classList.remove('visible');
+    document.getElementById('nombre-serie').value = '';
 
   } catch (err) {
     estado.textContent   = `Error al guardar: ${err.message}`;
@@ -304,5 +403,21 @@ document.getElementById('form-evento').addEventListener('submit', async (e) => {
 // ── Inicialización ────────────────────────────────────────────
 poblarAlcaldias();
 construirGrilla();
-cargarSeries();
+cargarNombresSeries();
 verificarSesion();
+
+document.getElementById('btn-geocoding').addEventListener('click', buscarDireccion);
+document.getElementById('btn-autorellenar').addEventListener('click', () => {
+  autorellenarBusqueda();
+  document.getElementById('geocoding-input').focus();
+});
+document.getElementById('geocoding-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); buscarDireccion(); }
+});
+
+// Cerrar resultados al hacer clic fuera del buscador
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.geocoding-wrapper')) {
+    document.getElementById('geocoding-resultados').style.display = 'none';
+  }
+});
