@@ -191,10 +191,15 @@ function poblarFiltroSeries() {
 // Renderiza la lista lateral de eventos
 function renderizarLista(eventos) {
   const lista = document.getElementById('lista-eventos');
+  const contador = document.getElementById('contador-eventos');
   lista.innerHTML = '';
 
+  contador.textContent = eventos.length === 0
+    ? 'Sin resultados'
+    : `${eventos.length} evento${eventos.length !== 1 ? 's' : ''}`;
+
   if (eventos.length === 0) {
-    lista.innerHTML = '<li style="padding:.75rem;color:var(--color-texto-suave)">Sin resultados</li>';
+    lista.innerHTML = '<li style="padding:.45rem .35rem;color:var(--color-texto-suave)">Sin resultados para los filtros aplicados</li>';
     return;
   }
 

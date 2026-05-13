@@ -305,15 +305,15 @@
 }
 
 .estado-envio.exito {
-  background: #e6f9f0;
-  color: #1a7a4a;
-  border: 1px solid #a3e4c1;
+  background: var(--fondo-confirmacion);
+  color: var(--color-confirmacion-3);
+  border: 1px solid var(--borde-confirmacion);
 }
 
 .estado-envio.error {
-  background: #fdf0ee;
-  color: #c0392b;
-  border: 1px solid #e8b4b0;
+  background: var(--fondo-error);
+  color: var(--color-error-3);
+  border: 1px solid var(--borde-error);
 }
 
 @media (max-width: 600px) {

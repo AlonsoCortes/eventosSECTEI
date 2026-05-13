@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Geovisor – Eventos SECTEI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/sisdai.min.css">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/geovisor.css">
   <!-- MapLibre GL CSS -->
@@ -38,13 +42,15 @@
             <option value="">Todos</option>
           </select>
         </div>
-        <div class="filtro-grupo">
-          <label for="filtro-fecha-desde">Desde</label>
-          <input type="date" id="filtro-fecha-desde">
-        </div>
-        <div class="filtro-grupo">
-          <label for="filtro-fecha-hasta">Hasta</label>
-          <input type="date" id="filtro-fecha-hasta">
+        <div class="filtro-fechas">
+          <div class="filtro-grupo">
+            <label for="filtro-fecha-desde">Desde</label>
+            <input type="date" id="filtro-fecha-desde">
+          </div>
+          <div class="filtro-grupo">
+            <label for="filtro-fecha-hasta">Hasta</label>
+            <input type="date" id="filtro-fecha-hasta">
+          </div>
         </div>
         <button class="btn btn-secundario" id="btn-limpiar-filtros" style="width:100%;margin-top:.25rem;padding:.3rem .75rem;font-size:.8rem">
           Limpiar filtros
@@ -52,8 +58,9 @@
       </div>
 
       <div class="panel-lateral__contenido">
+        <p class="contador-eventos" id="contador-eventos"></p>
         <ul class="lista-eventos" id="lista-eventos">
-          <li style="padding:.75rem;color:var(--color-texto-suave)">Cargando eventos…</li>
+          <li style="padding:.45rem .35rem;color:var(--color-texto-suave)">Cargando eventos…</li>
         </ul>
       </div>
     </aside>

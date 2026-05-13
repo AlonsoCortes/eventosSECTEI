@@ -43,7 +43,7 @@
 
 .tabla-recientes th {
   background: var(--color-primario);
-  color: #fff;
+  color: var(--color-neutro-0);
   padding: .5rem .75rem;
   text-align: left;
   font-weight: 600;

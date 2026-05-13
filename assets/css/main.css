@@ -1,33 +1,44 @@
 /* =====================================================
    Estilos globales – eventosSECTEI
+   Capa sobre sisdai-css (@centrogeomx/sisdai-css)
    ===================================================== */
 
+/* --- Paleta de marca SECTEI (sobreescribe perfil sisdai) --- */
 :root {
-  --color-primario:    #7d1f3c;
-  --color-secundario:  #a0294f;
+  --color-primario-4:       #5e1730;
+  --color-primario-3:       #7d1f3c;
+  --color-primario-2:       #b05070;
+  --color-primario-1:       #c88098;
+
+  --color-secundario-12:    #2a0d18;
+  --color-secundario-11:    #2a0d18;
+  --color-secundario-11-rgb: 42, 13, 24;
+  --color-secundario-10:    #3d1225;
+  --color-secundario-9:     #5a1b36;
+  --color-secundario-8:     #a0294f;
+  --color-secundario-7:     #c05070;
+  --color-secundario-6:     #d08090;
+  --color-secundario-5:     #e0a0b0;
+  --color-secundario-4:     #f5d8e0;
+  --color-secundario-3:     #faeaee;
+  --color-secundario-2:     #fdf5f7;
+  --color-secundario-1:     #fff8fa;
+
+  /* Alias semánticos del proyecto */
+  --color-primario:    var(--color-primario-3);
+  --color-secundario:  var(--color-secundario-8);
   --color-acento:      #c8943a;
   --color-fondo:       #f5f7fa;
   --color-superficie:  #ffffff;
-  --color-texto:       #1e2432;
-  --color-texto-suave: #6b7280;
-  --color-borde:       #e2e8f0;
+  --color-texto:       var(--texto-primario);
+  --color-texto-suave: var(--color-neutro-4);
+  --color-borde:       var(--borde);
   --radio:             8px;
   --sombra:            0 2px 8px rgba(0,0,0,.08);
-  --fuente:            'Segoe UI', system-ui, sans-serif;
 }
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html { font-size: 16px; }
 
 body {
-  font-family: var(--fuente);
   background: var(--color-fondo);
-  color: var(--color-texto);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -35,7 +46,7 @@ body {
 
 /* --- Navbar ----------------------------------------- */
 .navbar {
-  background: #fff;
+  background: var(--color-superficie);
   padding: 0 1.5rem;
   display: flex;
   align-items: center;
@@ -90,7 +101,7 @@ body {
 }
 
 .btn-registrar:hover {
-  background: var(--color-secundario);
+  background: var(--color-primario-4);
   color: #fff !important;
 }
 
@@ -202,8 +213,9 @@ body {
   letter-spacing: .5px;
 }
 
-/* --- Botones ---------------------------------------- */
-.btn {
+/* --- Botones (integra clases sisdai: .boton) -------- */
+.btn,
+.boton {
   display: inline-block;
   padding: .55rem 1.25rem;
   border-radius: var(--radio);
@@ -215,20 +227,24 @@ body {
   text-decoration: none;
 }
 
-.btn-primario {
-  background: var(--color-secundario);
+.btn-primario,
+.boton-primario {
+  background: var(--color-primario);
   color: #fff;
 }
 
-.btn-primario:hover { background: var(--color-primario); }
+.btn-primario:hover,
+.boton-primario:hover { background: var(--color-primario-4); color: #fff; }
 
-.btn-secundario {
+.btn-secundario,
+.boton-secundario {
   background: transparent;
   color: var(--color-secundario);
   border: 1px solid var(--color-secundario);
 }
 
-.btn-secundario:hover {
+.btn-secundario:hover,
+.boton-secundario:hover {
   background: var(--color-secundario);
   color: #fff;
 }
@@ -251,9 +267,9 @@ footer {
 }
 
 .error-msg {
-  color: #c0392b;
-  background: #fdf0ee;
-  border: 1px solid #e8b4b0;
+  color: var(--color-error-3);
+  background: var(--fondo-error);
+  border: 1px solid var(--borde-error);
   border-radius: var(--radio);
   padding: .75rem 1rem;
   font-size: .9rem;
