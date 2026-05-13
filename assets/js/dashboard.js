@@ -30,7 +30,9 @@ function renderizarKPIs() {
   document.getElementById('kpi-eventos').textContent     = datosEventos.length.toLocaleString('es-MX');
   document.getElementById('kpi-asistentes').textContent  = total.toLocaleString('es-MX');
   document.getElementById('kpi-pct-mujeres').textContent = total ? `${pctMujeres}%` : '—';
+  document.getElementById('kpi-num-mujeres').textContent = total ? `${mujeres.toLocaleString('es-MX')} personas` : '';
   document.getElementById('kpi-pct-disc').textContent    = total ? `${pctDisc}%` : '—';
+  document.getElementById('kpi-num-disc').textContent    = total ? `${conDisc.toLocaleString('es-MX')} personas` : '';
 }
 
 // --- Gráficas ----------------------------------------------------------------
@@ -39,7 +41,6 @@ function renderizarGraficas() {
 
   graficaEdad();
   graficaGenero();
-  graficaDiscapacidad();
 }
 
 function graficaEdad() {
@@ -51,7 +52,10 @@ function graficaEdad() {
 
   const datos = ORDEN_RANGOS.map(r => ({ rango: r, conteo: agregado[r] }));
 
+  const contenedor = document.getElementById('grafica-edad');
   const grafica = Plot.plot({
+    width:      contenedor.clientWidth || 800,
+    height:     340,
     marginLeft: 50,
     x: { label: 'Asistentes' },
     y: { label: null, domain: ORDEN_RANGOS },
@@ -61,7 +65,6 @@ function graficaEdad() {
     ],
   });
 
-  const contenedor = document.getElementById('grafica-edad');
   contenedor.innerHTML = '';
   contenedor.appendChild(grafica);
 }
@@ -75,7 +78,10 @@ function graficaGenero() {
   const datos = Object.entries(agregado).map(([genero, conteo]) => ({ genero, conteo }));
   const colores = { mujer: '#e056a0', hombre: '#2d7dd2', otro: '#f4a620' };
 
+  const contenedor = document.getElementById('grafica-genero');
   const grafica = Plot.plot({
+    width:      contenedor.clientWidth || 800,
+    height:     220,
     marginLeft: 70,
     x: { label: 'Asistentes' },
     y: { label: null },
@@ -86,31 +92,6 @@ function graficaGenero() {
     ],
   });
 
-  const contenedor = document.getElementById('grafica-genero');
-  contenedor.innerHTML = '';
-  contenedor.appendChild(grafica);
-}
-
-function graficaDiscapacidad() {
-  const sinDisc = datosAsistencia.filter(r => !r.tiene_discapacidad).reduce((s, r) => s + r.conteo, 0);
-  const conDisc = datosAsistencia.filter(r =>  r.tiene_discapacidad).reduce((s, r) => s + r.conteo, 0);
-
-  const datos = [
-    { condicion: 'Sin discapacidad', conteo: sinDisc },
-    { condicion: 'Con discapacidad',  conteo: conDisc },
-  ];
-
-  const grafica = Plot.plot({
-    marginLeft: 120,
-    x: { label: 'Asistentes' },
-    y: { label: null },
-    marks: [
-      Plot.barX(datos, { y: 'condicion', x: 'conteo', fill: '#6c5ce7', tip: true }),
-      Plot.ruleX([0]),
-    ],
-  });
-
-  const contenedor = document.getElementById('grafica-discapacidad');
   contenedor.innerHTML = '';
   contenedor.appendChild(grafica);
 }

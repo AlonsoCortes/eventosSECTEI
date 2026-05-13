@@ -213,6 +213,12 @@ body {
   letter-spacing: .5px;
 }
 
+.kpi__subvalor {
+  font-size: .78rem;
+  color: var(--color-texto-suave);
+  margin-top: .25rem;
+}
+
 /* --- Botones (integra clases sisdai: .boton) -------- */
 .btn,
 .boton {
