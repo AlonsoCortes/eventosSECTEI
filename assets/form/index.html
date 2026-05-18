@@ -175,7 +175,11 @@
             <!-- Colonia -->
             <div class="campo">
               <label for="colonia">Colonia</label>
-              <input type="text" id="colonia" placeholder="Ej. Nonoalco Tlatelolco">
+              <div class="geocoding-wrapper" style="gap:0">
+                <input type="text" id="colonia" autocomplete="off"
+                       placeholder="Escribe una colonia…">
+                <ul class="geocoding-resultados" id="colonia-resultados" style="display:none"></ul>
+              </div>
             </div>
 
             <!-- Temática -->

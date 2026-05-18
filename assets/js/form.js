@@ -4,24 +4,7 @@
 const RANGOS_EDAD = ['3-5', '6-11', '12-14', '15-17', '18-23', '24-29', '30-64', '65+'];
 const GENEROS     = ['mujer', 'hombre', 'otro'];
 
-const ALCALDIAS = [
-  'Álvaro Obregón',
-  'Azcapotzalco',
-  'Benito Juárez',
-  'Coyoacán',
-  'Cuajimalpa de Morelos',
-  'Cuauhtémoc',
-  'Gustavo A. Madero',
-  'Iztacalco',
-  'Iztapalapa',
-  'La Magdalena Contreras',
-  'Miguel Hidalgo',
-  'Milpa Alta',
-  'Tláhuac',
-  'Tlalpan',
-  'Venustiano Carranza',
-  'Xochimilco',
-];
+let catalogoColonias = {}; // { "Alcaldía": ["Colonia 1", ...] }
 
 // Centro de la CDMX para el mapa picker
 const CDMX_CENTER = [-99.1332, 19.4326];
@@ -97,10 +80,70 @@ document.querySelectorAll('input[name="tipo_evento"]').forEach(radio => {
 });
 
 
-// ── Alcaldías ─────────────────────────────────────────────────
+// ── Catálogo de colonias / alcaldías ──────────────────────────
+async function cargarCatalogoColonias() {
+  const resp  = await fetch('../catalogos/colonias_cdmx_2025_inegi.csv');
+  const texto = await resp.text();
+  texto.trim().split('\n').slice(1).forEach(linea => {
+    const coma     = linea.indexOf(',');
+    const colonia  = linea.slice(0, coma).trim();
+    const alcaldia = linea.slice(coma + 1).trim();
+    if (!catalogoColonias[alcaldia]) catalogoColonias[alcaldia] = [];
+    catalogoColonias[alcaldia].push(colonia);
+  });
+  poblarAlcaldias();
+  iniciarAutocompletoColonia();
+}
+
 function poblarAlcaldias() {
-  const select = document.getElementById('municipio');
-  ALCALDIAS.forEach(a => select.appendChild(new Option(a, a)));
+  const select    = document.getElementById('municipio');
+  const alcaldias = Object.keys(catalogoColonias).sort((a, b) => a.localeCompare(b, 'es'));
+  alcaldias.forEach(a => select.appendChild(new Option(a, a)));
+}
+
+function iniciarAutocompletoColonia() {
+  const input = document.getElementById('colonia');
+  const lista  = document.getElementById('colonia-resultados');
+
+  function mostrarSugerencias() {
+    const alcaldia = document.getElementById('municipio').value;
+    const query    = input.value.trim().toLowerCase();
+    lista.innerHTML = '';
+
+    const fuente = alcaldia
+      ? (catalogoColonias[alcaldia] || [])
+      : Object.values(catalogoColonias).flat();
+
+    const coincidencias = query
+      ? fuente.filter(c => c.toLowerCase().includes(query)).slice(0, 8)
+      : fuente.slice(0, 8);
+
+    if (!coincidencias.length) { lista.style.display = 'none'; return; }
+
+    coincidencias.forEach(col => {
+      const li = document.createElement('li');
+      li.textContent = col;
+      li.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        input.value = col;
+        lista.style.display = 'none';
+      });
+      lista.appendChild(li);
+    });
+    lista.style.display = 'block';
+  }
+
+  input.addEventListener('focus', mostrarSugerencias);
+  input.addEventListener('input', mostrarSugerencias);
+
+  input.addEventListener('blur', () => {
+    setTimeout(() => { lista.style.display = 'none'; }, 150);
+  });
+
+  document.getElementById('municipio').addEventListener('change', () => {
+    input.value = '';
+    lista.style.display = 'none';
+  });
 }
 
 
@@ -385,6 +428,7 @@ document.getElementById('form-evento').addEventListener('submit', async (e) => {
     document.getElementById('longitud').value = '';
     document.getElementById('geocoding-input').value = '';
     document.getElementById('geocoding-resultados').style.display = 'none';
+    document.getElementById('colonia-resultados').style.display   = 'none';
     document.getElementById('panel-serie').classList.add('visible');
     document.getElementById('panel-unico').classList.remove('visible');
     document.getElementById('nombre-serie').value = '';
@@ -401,7 +445,7 @@ document.getElementById('form-evento').addEventListener('submit', async (e) => {
 
 
 // ── Inicialización ────────────────────────────────────────────
-poblarAlcaldias();
+cargarCatalogoColonias();
 construirGrilla();
 cargarNombresSeries();
 verificarSesion();
